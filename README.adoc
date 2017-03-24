@@ -55,3 +55,8 @@ pcf:
     DeploymentContextBasedVipAddresses: myeurekaappname
 ----
 
+== Challenges with Sticky session
+
+- If Zuul and the target app are hosted on PCF then the call will go via gorouter twice. If there is JSESSIONID being set, then the gorouter tends to add the VCAP_ID twice
+- We add a custom token to route to "legacy" or "pcf" app - however we don't have a good mechanism to expire this currently. Short term we plan to just add the same expiry as the JSESSIONID cookie, but we will never know if the session has been invalidated manually.
+
