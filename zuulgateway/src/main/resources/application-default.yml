@@ -1,0 +1,16 @@
+legacy:
+  ribbon:
+    listOfServers: http://localhost:8081
+
+pcf:
+  ribbon:
+    listOfServers: http://localhost:8082
+
+ribbon:
+  eureka:
+    enabled: false
+
+
+routing:
+  ratio:
+    old-percent: 50

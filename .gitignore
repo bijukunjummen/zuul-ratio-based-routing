@@ -1,0 +1,38 @@
+# Base Java on a Mac ignore file
+.DS_Store
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.war
+*.ear
+*.jar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Lib files
+*.libd
+
+# Ignore IntelliJ assets
+.idea
+*.iml
+*.ipr
+*.iws
+
+#Ignore .gradle assets
+.gradle
+
+#Ignore the build directory
+*/build/*
+build/*
+
+# eclipse files
+*.project
+org.eclipse.*
+*.classpath
+*.prefs
+/build/

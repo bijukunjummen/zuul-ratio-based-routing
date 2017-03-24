@@ -1,0 +1,57 @@
+== Sample Application Demonstrating Ratio based Routing to a legacy and a modern app
+
+This app demonstrates using Zuul to route to a "legacy" and a "pcf" based app based on user specified ratios. 
+
+Additionally it understands sessions - if say the user is routed to the legacy app and the app is session based then further requests from the user will be pinned to the legacy app.
+
+
+== Starting it up Locally
+
+In three terminal windows:
+
+Terminal 1:
+[source, java]
+----
+cd zuulgateway
+../gradlew bootRun
+----
+
+Terminal 2:
+[source, java]
+----
+cd legacyapp
+../gradlew bootRun
+----
+
+Terminal 3:
+[source, java]
+----
+cd pcfapp
+../gradlew bootRun
+----
+
+== Testing the routing behavior
+
+Access an endpoint - http://localhost:8080/routes/message, the request will be routed to either "pcfapp" or "legacyapp" based on this property:
+
+[source, java]
+----
+routing:
+  ratio:
+    old-percent: 50
+----
+
+Access another session based endpoint in an "Incognito" window - http://localhost:8080/routes/withsession, the behavior now will be once the user is directed to one 
+of the versions of the app, subsequent requests should stick to the same app.
+
+
+== Deploying to CloudFoundry using SCS Tile
+All the libraries relevant to getting it to work with SCS tile is already present with the app, just bind to Eureka, specify the name of the "pcfapp" via properties in zuulgateway, for eg:
+
+[source, java]
+----
+pcf:
+  ribbon:
+    DeploymentContextBasedVipAddresses: myeurekaappname
+----
+
