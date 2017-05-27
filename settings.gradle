@@ -1,3 +1,4 @@
-include 'legacyapp'
-include 'pcfapp'
-include 'zuulgateway'
+include 'legacy-app'
+include 'modern-app'
+include 'zuul-routing-gateway'
+include 'sample-eureka'

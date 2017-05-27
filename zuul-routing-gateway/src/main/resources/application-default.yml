@@ -1,0 +1,11 @@
+legacy:
+  ribbon:
+    listOfServers: http://localhost:8081
+
+modern:
+  ribbon:
+    DeploymentContextBasedVipAddresses: modern-app
+
+routing:
+  ratio:
+    old-percent: 50

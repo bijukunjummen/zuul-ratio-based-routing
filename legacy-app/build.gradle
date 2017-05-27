@@ -1,0 +1,5 @@
+version = '0.0.1-SNAPSHOT'
+
+dependencies {
+    compile 'org.springframework.metrics:spring-metrics:0.3.0.RELEASE'
+}
