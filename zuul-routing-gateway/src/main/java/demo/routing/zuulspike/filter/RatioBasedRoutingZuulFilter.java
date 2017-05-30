@@ -1,22 +1,25 @@
 package demo.routing.zuulspike.filter;
 
-import demo.routing.zuulspike.RatioRoutingProperties;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import demo.routing.zuulspike.RatioRoutingProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import java.util.Random;
 
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SERVICE_ID_KEY;
+
 @Service
-@Order(1)
 public class RatioBasedRoutingZuulFilter extends ZuulFilter {
 
-    public static final String LEGACY_APP_NAME = "legacy";
-    public static final String MODERN_APP_NAME = "modern";
+    public static final String LEGACY_APP = "legacy";
+    public static final String MODERN_APP = "modern";
+    
     private Random random = new Random();
+    
     @Autowired
     private RatioRoutingProperties ratioRoutingProperties;
 
@@ -27,12 +30,14 @@ public class RatioBasedRoutingZuulFilter extends ZuulFilter {
 
     @Override
     public int filterOrder() {
-        return 0;
+        return FilterConstants.PRE_DECORATION_FILTER_ORDER + 1;
     }
 
     @Override
     public boolean shouldFilter() {
-        return true;
+        RequestContext ctx = RequestContext.getCurrentContext();
+        return ctx.containsKey(SERVICE_ID_KEY)
+                && ctx.get(SERVICE_ID_KEY).equals("ratio-route");
     }
 
     @Override
@@ -40,16 +45,20 @@ public class RatioBasedRoutingZuulFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
 
         if (!isZuulCookiePresent(ctx)) {
-            if (random.nextInt(100) < ratioRoutingProperties.getOldPercent()) {
-                ctx.put("serviceId", LEGACY_APP_NAME);
+            if (isTargetedToLegacy()) {
+                ctx.put(SERVICE_ID_KEY, LEGACY_APP);
             } else {
-                ctx.put("serviceId", MODERN_APP_NAME);
+                ctx.put(SERVICE_ID_KEY, MODERN_APP);
             }
         } else {
             String sessionServiceId = getZuulCookie(ctx).getValue();
-            ctx.put("serviceId", sessionServiceId);
+            ctx.put(SERVICE_ID_KEY, sessionServiceId);
         }
         return null;
+    }
+
+    boolean isTargetedToLegacy() {
+        return random.nextInt(100) < ratioRoutingProperties.getOldPercent();
     }
 
 

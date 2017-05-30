@@ -1,7 +1,8 @@
 zuul:
   routes:
-    gateway:
+    ratio-route:
       path: /routes/**
+      strip-prefix: false
 
 
 security:

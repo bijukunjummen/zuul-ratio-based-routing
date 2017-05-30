@@ -2,4 +2,6 @@ version = '0.0.1-SNAPSHOT'
 
 dependencies {
     compile 'org.springframework.metrics:spring-metrics:0.3.0.RELEASE'
+    compile 'io.prometheus:simpleclient:0.0.22'
+    compile 'io.prometheus:simpleclient_spring_boot:0.0.22'
 }

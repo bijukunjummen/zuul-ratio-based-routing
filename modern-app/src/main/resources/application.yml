@@ -2,6 +2,10 @@ security:
   basic:
     enabled: false
 
+management:
+  security:
+    enabled: false
+    
 server:
   port: 8082
   
